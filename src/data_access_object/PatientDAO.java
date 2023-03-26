@@ -10,7 +10,6 @@ import controller.Patient;
 import utils.ConnectionFactory;
 
 public class PatientDAO {
-	Connection con = ConnectionFactory.getConnection();
 	String sql = null;
 
 	protected void index() {
@@ -18,6 +17,7 @@ public class PatientDAO {
 	}
 
 	public void insert(Patient p) throws SQLException {
+		Connection con = ConnectionFactory.getConnection();
 		sql = "INSERT INTO pacientes (nome, cpf, genero, dataNasc) VALUES (?, ?, ?, ?)";
 		try {
 			PreparedStatement stmt = con.prepareStatement(sql);
@@ -36,6 +36,7 @@ public class PatientDAO {
 	}
 
 	public void update(Patient p) throws SQLException {
+		Connection con = ConnectionFactory.getConnection();
 		sql = "UPDATE pacientes SET nome = ?, cpf = ?, genero = ?, dataNasc = ? WHERE id = ?";
 		try {
 			PreparedStatement stmt = con.prepareStatement(sql);
@@ -53,4 +54,26 @@ public class PatientDAO {
 			con.close();
 		}
 	}
+
+	protected void delete(Patient p) throws SQLException {
+		Connection con = ConnectionFactory.getConnection();
+		int option = JOptionPane.showConfirmDialog(null, "Você tem certeza de que deseja fazer isso?",
+				"Excluir paciente", JOptionPane.YES_NO_OPTION);
+		if (option == JOptionPane.YES_OPTION) {
+			sql = "DELETE * FROM pacientes WHERE id = ?";
+			try {
+				PreparedStatement stmt = con.prepareStatement(sql);
+				stmt.setInt(1, p.getId());
+				stmt.executeUpdate();
+				stmt.close();
+				JOptionPane.showMessageDialog(null, "Paciente excluído com sucesso.");
+			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(null, e);
+			} finally {
+				con.close();
+			}
+			
+		}
+	}
+
 }
