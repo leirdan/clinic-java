@@ -12,7 +12,7 @@ public class ConnectionFactory {
 	private static final String user = "leirdan";
 	private static final String passwd = "passwd123";
 	
-	public static final Connection getConnection() throws SQLException {
+	public static Connection getConnection() {
 		Connection con = null;
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
